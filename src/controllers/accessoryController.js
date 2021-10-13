@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const accessoryService;
+const accessoryService = require('../services/accessoryService');
 
 let options = null;
 
