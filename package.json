@@ -1,0 +1,25 @@
+{
+  "name": "cubicle",
+  "version": "1.0.0",
+  "description": "Cubicle is a place, where you can browse some of the most popular Rubik cubes in the world and add some new cubes that you have discovered.",
+  "main": "index.js",
+  "scripts": {
+    "start": "SET NODE_ENV=development&&SET PORT=3000&&nodemon ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cookie-parser": "1.4.5",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.4",
+    "jsonwebtoken": "8.5.1",
+    "mongoose": "^6.0.8",
+    "uniqid": "^5.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  }
+}
