@@ -5,7 +5,7 @@ const get = (id) => Cube.findById(id).populate('accessories').lean();
 
 const getAll = () => Cube.find({}).lean();
 
-const create = (name, description, imageUrl, difficultyLvl, creatorId) => Cube.create({ name, description, imageUrl, difficultyLvl, creatorId });
+const create = (name, description, imageUrl, difficulty, creatorId) => Cube.create({ name, description, imageUrl, difficulty, creatorId });
 
 const edit = (id, data) => Cube.findByIdAndUpdate(id, { ...data });
 
@@ -36,15 +36,15 @@ const search = async function (searchText, from, to) {
 
     if (from) {
         results = results.filter(v => {
-            let difficultyLvl = v.difficultyLvl;
-            return difficultyLvl >= from;
+            let { difficulty } = v;
+            return difficulty >= from;
         });
     }
 
     if (to) {
         results = results.filter(v => {
-            let difficultyLvl = v.difficultyLvl;
-            return difficultyLvl <= to;
+            let { difficulty } = v;
+            return difficulty <= to;
         });
     }
 
