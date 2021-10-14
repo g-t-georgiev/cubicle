@@ -212,7 +212,7 @@ div.form {
     margin: auto;
 }
 
-span.error {
+/* span.error {
     animation: fadeOut 1s forwards;
     animation-delay: 2s;
     background: #EF5542;
@@ -227,6 +227,14 @@ span.error {
     margin-top: 20px;
     overflow: hidden;
     display: block;
+} */
+
+#notifications {
+    margin: 2% auto;
+    text-align: center;
+    width: 50%;
+    padding: 0.5%;
+    background-color: rgb(231,118,118);
 }
 
 img#sadFaceImg{
