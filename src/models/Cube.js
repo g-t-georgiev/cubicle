@@ -3,12 +3,25 @@ const mongoose = require('mongoose');
 const cubeSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'Name is required.']
+        required: [true, 'Name is required.'],
+        minlength: [5, 'Cube name must be at least 5 characters long.'],
+        validate: {
+            validator: function(v) {
+                return /[a-z0-9 ]/i.test(v);
+            },
+            message: 'Cube name can consist only of english letters, digits and white spaces.'
+        }
     },
     description: {
         type: String,
         required: [true, 'Description is required.'],
-        maxlength: 1000
+        minlength: [20, 'Cube description must be at least 20 characters long.'],
+        validate: {
+            validator: function(v) {
+                return /[a-z0-9 ]/i.test(v);
+            },
+            message: 'Cube description can consist only of english letters, digits and white spaces.'
+        }
     },
     imageUrl: {
         type: String,
