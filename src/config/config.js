@@ -8,3 +8,5 @@ const env = {
         db: ''
     }
 };
+
+module.exports = env;
