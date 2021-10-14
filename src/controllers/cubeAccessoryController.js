@@ -6,8 +6,10 @@ const accessoryService = require('../services/accessoryService');
 let options = null;
 
 const renderAddCubeAccessoryPageHandler = async function(req, res) {
-    const { cube } = req;
+    const { cubeId } = req.params;
 
+    const cube = await cubeService.get(cubeId);
+    
     const cubeAccessoriesIds = cube.accessories?.map(accessory => accessory['_id']);
 
     const unattachedAccessories = await accessoryService.getAllWithout(cubeAccessoriesIds);
