@@ -5,8 +5,18 @@ const cubeAccessoryController = require('./cubeAccessoryController');
 
 const renderCubeDifficultyOptions = require('../helpers/renderCubeDifficultyOptions');
 
-const attachCubeMiddleware = require('../middlewares/attachCubeMiddleware');
-const userStatusMiddleware = require('../middlewares/userStatusMiddleware');
+const userStatusMiddleware = async function (req, res, next) {
+    const { user, params } = req;
+    const { cubeId } = params;
+
+    const cube = await cubeService.get(cubeId);
+
+    const isLoggedin = Boolean(user);
+
+    req.hasPermissions = isLoggedin ? cube ? cube.creatorId === user._id : true : false;
+    res.locals.isOwner = cube && user ? cube.creatorId === user._id : false;
+    return next();
+};
 
 const filterRequests = function (req, res, next) {
     const { hasPermissions } = req;
@@ -25,7 +35,8 @@ const renderCreateCubePageHandler = (req, res) => {
 };
 
 const renderCubeDetailsPageHandler = async function (req, res) {
-    const { cube } = req;
+    const { cubeId } = req.params;
+    const cube = await cubeService.get(cubeId);
     options = { ...cube };
     res.render('cubes/details', options);
 }
@@ -47,7 +58,8 @@ const createCubeHandler = async function (req, res) {
 };
 
 const renderEditCubePageHandler = async function (req, res) {
-    const { cube } = req;
+    const { cubeId } = req.params;
+    const cube = await cubeService.get(cubeId);
     const difficulties = renderCubeDifficultyOptions(cube.difficulty);
     options = { ...cube, difficulties };
     res.render('cubes/edit', options);
@@ -70,7 +82,8 @@ const editCubeHandler = async function (req, res) {
 };
 
 const renderDeleteCubePageHandler = async function (req, res) {
-    const { cube } = req;
+    const { cubeId } = req.params;
+    const cube = await cubeService.get(cubeId);
     const difficulties = renderCubeDifficultyOptions(cube.difficulty);
     options = { ...cube, difficulties };
     res.render('cubes/delete', options);
@@ -87,16 +100,13 @@ const deleteCubeHandler = async function (req, res) {
     }
 };
 
-router.use(attachCubeMiddleware);
-router.use(userStatusMiddleware);
-
-router.get('/:cubeId/details', renderCubeDetailsPageHandler);
-router.get('/:cubeId/edit', filterRequests, renderEditCubePageHandler);
-router.post('/:cubeId/edit', filterRequests, editCubeHandler);
-router.get('/:cubeId/delete', filterRequests, renderDeleteCubePageHandler);
-router.post('/:cubeId/delete', filterRequests, deleteCubeHandler);
-router.use('/:cubeId/accessories', filterRequests, cubeAccessoryController);
-router.get('/create', filterRequests, renderCreateCubePageHandler);
-router.post('/create', filterRequests, createCubeHandler);
+router.get('/:cubeId/details', userStatusMiddleware, renderCubeDetailsPageHandler);
+router.get('/:cubeId/edit', userStatusMiddleware, filterRequests, renderEditCubePageHandler);
+router.post('/:cubeId/edit', userStatusMiddleware, filterRequests, editCubeHandler);
+router.get('/:cubeId/delete', userStatusMiddleware, filterRequests, renderDeleteCubePageHandler);
+router.post('/:cubeId/delete', userStatusMiddleware, filterRequests, deleteCubeHandler);
+router.use('/:cubeId/accessories', userStatusMiddleware, filterRequests, cubeAccessoryController);
+router.get('/create', userStatusMiddleware, filterRequests, renderCreateCubePageHandler);
+router.post('/create', userStatusMiddleware, filterRequests, createCubeHandler);
 
 module.exports = router;
