@@ -1,3 +1,5 @@
+const cubeService = require('../services/cubeService');
+
 const attachCubeMiddleware = async function (req, res, next) {
     try {
         const { cubeId } = req.params;
