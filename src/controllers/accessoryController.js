@@ -12,8 +12,8 @@ const renderAddAccessoryPageHandler = (req, res) => res.render('accessories/crea
 const addAccessoryHandler = async (req, res) => {
     const { name, description, imageUrl } = req.body;
 
-    name = name.trim();
-    description = description.trim();
+    name = name.trim().toLowerCase();
+    description = description.trim().toLowerCase();
     imageUrl = imageUrl.trim();
     
     try {
