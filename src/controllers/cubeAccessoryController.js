@@ -12,10 +12,7 @@ const renderAddCubeAccessoryPageHandler = async function(req, res) {
 
     const unattachedAccessories = await accessoryService.getAllWithout(cubeAccessoriesIds);
 
-    options = {
-        cube,
-        unattachedAccessories
-    }
+    options = {  cube, unattachedAccessories }
 
     res.render('cubes/accessories/add', options);
 }
