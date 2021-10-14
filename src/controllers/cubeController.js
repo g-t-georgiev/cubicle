@@ -33,8 +33,8 @@ const renderCubeDetailsPageHandler = async function (req, res) {
 const createCubeHandler = async function (req, res) {
     const { name, description, imageUrl, difficulty, creatorId } = req.body;
 
-    name = name.trim();
-    description = description.trim();
+    name = name.trim().toLowerCase();
+    description = description.trim().toLowerCase();
     imageUrl = imageUrl.trim();
     difficulty = Number(difficulty.trim());
 
