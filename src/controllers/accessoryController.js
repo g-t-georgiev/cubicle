@@ -2,27 +2,12 @@ const router = require('express').Router();
 
 const accessoryService = require('../services/accessoryService');
 
-let options = null;
-
-const isAuthenticated = (req, res, next) => {
+const filterRequests = function (req, res, next) {
     const { user } = req;
-
-    if (!user) {
-        return res.redirect('/');
-    }
-
-    next();
+    return user ? next() : res.redirect('/');
 };
 
-const renderAddAccessoryPageHandler = (req, res) => {
-    const { isAuthenticated } = req;
-
-    options = {
-        isAuthenticated
-    };
-
-    res.render('accessories/create', options);
-};
+const renderAddAccessoryPageHandler = (req, res) => res.render('accessories/create');
 
 const addAccessoryHandler = async (req, res) => {
     const { name, description, imageUrl } = req.body;
@@ -30,13 +15,12 @@ const addAccessoryHandler = async (req, res) => {
     try {
         await accessoryService.create(name, description, imageUrl);
         res.redirect('/');
-    } catch (err) {
-        // console.log(err.message);
-        res.status(500).send(err.message);
+    } catch (error) {
+        res.status(500).send(error.message);
     }
 };
 
-router.get('/create', isAuthenticated, renderAddAccessoryPageHandler);
-router.post('/create', isAuthenticated, addAccessoryHandler);
+router.get('/create', filterRequests, renderAddAccessoryPageHandler);
+router.post('/create', filterRequests, addAccessoryHandler);
 
 module.exports = router;
