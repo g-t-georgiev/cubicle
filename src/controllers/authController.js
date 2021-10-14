@@ -3,28 +3,16 @@ const router = require('express').Router();
 const authService = require('../services/authService');
 const { TOKEN_NAME } = require('../config/constants');
 
-const isAuthenticated = function (req, res, next) {
-    const { isAuthenticated } = req;
+const filterRequests = function (req, res, next) {
+    const { user } = req;
 
-    if (isAuthenticated) {
-        res.redirect('/');
-        return;
-    }
-
-    next();
+    return !user ? next() : res.redirect('/');
 }
 
-router.get('/login', isAuthenticated, (req, res) => {
-    const { isAuthenticated } = req;
+const renderLoginPageHandler = (req, res) => res.render('auth/login');
+const renderRegisterPageHandler = (req, res) => res.render('auth/register');
 
-    options = {
-        isAuthenticated
-    };
-
-    res.render('auth/login', options);
-});
-
-router.post('/login', isAuthenticated, (req, res) => {
+const loginHandler = function (req, res) {
     let { username, password } = req.body;
 
     username = username.trim();
@@ -42,13 +30,9 @@ router.post('/login', isAuthenticated, (req, res) => {
         .catch(err => {
             res.status(err.status ?? 400).send(err.message);
         });
-});
+};
 
-router.get('/register', isAuthenticated, (req, res) => {
-    res.render('auth/register');
-});
-
-router.post('/register', isAuthenticated, (req, res) => {
+const registerHandler = function (req, res) {
     let {username, password, repeatPassword} = req.body;
 
     username = username.trim();
@@ -67,23 +51,25 @@ router.post('/register', isAuthenticated, (req, res) => {
         .catch(err => {
             res.status(err.status ?? 400).send(err.message);
         });
-});
+};
 
-router.get('/logout', (req, res) => {
-    const { isAuthenticated } = req;
+const logoutHandler = function (req, res) {
+    const { user } = req;
 
     try {
-        authService.logout(isAuthenticated);
-        res.cookie(TOKEN_NAME, '', {
-            httpOnly: true,
-            maxAge: -1
-        });
-        res.status(204);
+        authService.logout(user);
+        res.clearCookie(TOKEN_NAME);
     } catch (err) {
         console.log(err);
     } finally {
         res.redirect('/auth/login');
     }
-});
+};
+
+router.get('/login', filterRequests, renderLoginPageHandler);
+router.post('/login', filterRequests, loginHandler);
+router.get('/register', filterRequests, renderRegisterPageHandler);
+router.post('/register', filterRequests, registerHandler);
+router.get('/logout', logoutHandler);
 
 module.exports = router;
