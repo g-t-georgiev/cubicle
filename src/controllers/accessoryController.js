@@ -11,6 +11,10 @@ const renderAddAccessoryPageHandler = (req, res) => res.render('accessories/crea
 
 const addAccessoryHandler = async (req, res) => {
     const { name, description, imageUrl } = req.body;
+
+    name = name.trim();
+    description = description.trim();
+    imageUrl = imageUrl.trim();
     
     try {
         await accessoryService.create(name, description, imageUrl);
