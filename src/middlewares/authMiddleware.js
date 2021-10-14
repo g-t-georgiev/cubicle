@@ -7,7 +7,7 @@ function validateSession(req, res, next) {
     if (!token) {
         // No jwt token found in reques
         // So isAuthenticated is set to false
-        req.isAuthenticated = false;
+        res.locals.isAuthenticated = false;
         return next();
     }
 
@@ -16,15 +16,15 @@ function validateSession(req, res, next) {
         .then(decodedToken => {
             // Attach user to the request
             req.user = decodedToken;
-            req.isAuthenticated = true;
+            res.locals.isAuthenticated = true;
             next();
         })
-        .catch(err => {
+        .catch(error => {
             // Delete session cookie
             // console.log(err);
-            req.isAuthenticated = false;
+            res.locals.isAuthenticated = false;
             res.clearCookie(TOKEN_NAME);
-            next();
+            next(error);
         });
 }
 
