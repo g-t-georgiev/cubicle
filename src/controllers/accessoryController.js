@@ -10,7 +10,7 @@ const filterRequests = function (req, res, next) {
 const renderAddAccessoryPageHandler = (req, res) => res.render('accessories/create');
 
 const addAccessoryHandler = async (req, res) => {
-    const { name, description, imageUrl } = req.body;
+    let { name, description, imageUrl } = req.body;
 
     name = name.trim().toLowerCase();
     description = description.trim().toLowerCase();
