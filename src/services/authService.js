@@ -39,7 +39,7 @@ const login = function(username, password) {
 
 const logout = function (user) {
     const isLoggedin = Boolean(user);
-    
+
     if (!isLoggedin) {
         throw new AuthError('Invalid session token.', 403);
     }
