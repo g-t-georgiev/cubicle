@@ -1,4 +1,4 @@
-module.exports = function (difficultyLvl) {
+module.exports = function (difficulty) {
     const difficultiesMap = {
         1: '1 - Very Easy',
         2: '2 - Easy',
@@ -11,7 +11,7 @@ module.exports = function (difficultyLvl) {
     return (function (options = []) {
         for (let i = 1; i <= 6; i++) {
             const option = { value: i, text: difficultiesMap[i] };
-            const isSelected = difficultyLvl === i;
+            const isSelected = difficulty === i;
 
             if (isSelected) {
                 option.selected = isSelected;
