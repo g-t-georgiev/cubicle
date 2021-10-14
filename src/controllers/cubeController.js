@@ -33,6 +33,11 @@ const renderCubeDetailsPageHandler = async function (req, res) {
 const createCubeHandler = async function (req, res) {
     const { name, description, imageUrl, difficulty, creatorId } = req.body;
 
+    name = name.trim();
+    description = description.trim();
+    imageUrl = imageUrl.trim();
+    difficulty = Number(difficulty.trim());
+
     try {
         await cubeService.create(name, description, imageUrl, difficulty, creatorId);
         res.redirect('/');
