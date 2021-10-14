@@ -37,12 +37,14 @@ const login = function(username, password) {
         .then(([isValid, user]) => isValid ? user : Promise.reject(new AuthError('Invalid username or password', 403))));
 }
 
-const logout = function (isAuthenticated) {
-    if (!isAuthenticated) {
+const logout = function (user) {
+    const isLoggedin = Boolean(user);
+    
+    if (!isLoggedin) {
         throw new AuthError('Invalid session token.', 403);
     }
 
-    return isAuthenticated;
+    return isLoggedin;
 }
 
 const createToken = function (user) {
