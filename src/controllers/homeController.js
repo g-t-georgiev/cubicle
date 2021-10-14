@@ -16,12 +16,7 @@ const about = (req, res) => res.render('about');
 const search = async function (req, res) {
     const { search, from, to} = req.query;
     
-    const cubes = await cubeService.search(search, from, to)
-        .map(cube => {
-            const { name } = cube;
-            cube.name = name[0] + name.slice(1);
-            return cube;
-        });
+    const cubes = await cubeService.search(search, from, to);
 
     options = {
         pageTitle: 'SEARCH',
