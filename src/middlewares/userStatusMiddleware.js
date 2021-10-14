@@ -1,7 +1,10 @@
 const userStatusMiddleware = function (req, res, next) {
     const { user, cube } = req;
-    req.hasPermissions = !user || cube.creatorId === user?._id;
-    res.locals.isOwner = cube.creatorId === user?._id;
+
+    const isLoggedin = Boolean(user);
+
+    req.hasPermissions = isLoggedin ? cube ? cube.creatorId === user._id : true : false;
+    res.locals.isOwner = cube && user ? cube.creatorId === user._id : false;
     return next();
 };
 
