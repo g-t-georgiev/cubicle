@@ -29,7 +29,7 @@ const search = async function (searchText, from, to) {
 
     if (searchText) {
         results = results.filter(v => {
-            let name = v.name?.toLowerCase();
+            let name = v.name;
             return name.includes(searchText);
         });
     }
