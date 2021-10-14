@@ -25,7 +25,7 @@ const search = async function (searchText, from, to) {
 
     if (fieldsEmpty) return [];
 
-    let results = await getAll();
+    let results = await getAll() ?? [];
 
     if (searchText) {
         results = results.filter(v => {
@@ -48,7 +48,11 @@ const search = async function (searchText, from, to) {
         });
     }
 
-    return results;
+    return results.map(cube => {
+        const { name } = cube;
+        cube.name = name[0] + name.slice(1);
+        return cube;
+    });;
 };
 
 const addAccessory = async function (cubeId, accessoryId) {

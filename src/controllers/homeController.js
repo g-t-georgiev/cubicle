@@ -5,12 +5,7 @@ const cubeService = require('../services/cubeService');
 let options = null;
 
 const home = async function (req, res) {
-    const cubes = await cubeService.getAll()
-        .map(cube => {
-            const { name } = cube;
-            cube.name = name[0] + name.slice(1);
-            return cube;
-        });
+    const cubes = await cubeService.getAll();
 
     options = { pageTitle: 'BROWSER', cubes };
     res.render('index', options);
