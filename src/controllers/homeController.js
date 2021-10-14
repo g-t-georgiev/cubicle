@@ -5,42 +5,35 @@ const cubeService = require('../services/cubeService');
 let options = null;
 
 const home = async function (req, res) {
-    const { isAuthenticated } = req;
-    
-    const cubes = await cubeService.getAll();
+    const cubes = await cubeService.getAll()
+        .map(cube => {
+            const { name } = cube;
+            cube.name = name[0] + name.slice(1);
+            return cube;
+        });
 
-    options = {
-        pageTitle: 'BROWSER',
-        cubes,
-        isAuthenticated
-    };
-
+    options = { pageTitle: 'BROWSER', cubes };
     res.render('index', options);
 };
 
-const about = function (req, res) {
-    const { isAuthenticated } = req;
-
-    options = {
-        isAuthenticated
-    };
-
-    res.render('about', options);
-};
+const about = (req, res) => res.render('about');
 
 const search = async function (req, res) {
-    const { isAuthenticated } = req;
     const { search, from, to} = req.query;
     
-    const cubes = await cubeService.search(search, from, to);
+    const cubes = await cubeService.search(search, from, to)
+        .map(cube => {
+            const { name } = cube;
+            cube.name = name[0] + name.slice(1);
+            return cube;
+        });
 
     options = {
         pageTitle: 'SEARCH',
         search: search.trim(),
         from: from.trim(),
         to: to.trim(),
-        cubes,
-        isAuthenticated
+        cubes
     };
 
     res.render('index', options);
