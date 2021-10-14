@@ -57,6 +57,10 @@ const editCubeHandler = async function (req, res) {
     const { cubeId } = req.params;
     const data = req.body;
 
+    data.name = data.name.trim().toLowerCase();
+    data.description = data.description.trim().toLowerCase();
+    data.imageUrl = data.imageUrl.trim();
+
     try {
         await cubeService.edit(cubeId, data);
         res.redirect(`/cubes/${cubeId}/details`);
