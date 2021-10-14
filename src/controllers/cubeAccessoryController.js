@@ -6,18 +6,15 @@ const accessoryService = require('../services/accessoryService');
 let options = null;
 
 const renderAddCubeAccessoryPageHandler = async function(req, res) {
-    const { isAuthenticated, params: urlParams } = req;
-    const { cubeId } = urlParams;
+    const { cube } = req;
 
-    const cube = await cubeService.get(cubeId);
     const cubeAccessoriesIds = cube.accessories?.map(accessory => accessory['_id']);
 
     const unattachedAccessories = await accessoryService.getAllWithout(cubeAccessoriesIds);
 
     options = {
         cube,
-        unattachedAccessories,
-        isAuthenticated
+        unattachedAccessories
     }
 
     res.render('cubes/accessories/add', options);
