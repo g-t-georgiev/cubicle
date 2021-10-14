@@ -28,7 +28,7 @@ const cubeSchema = new mongoose.Schema({
         required: [true, 'Image URL is required.'],
         validate: [/^https?:\/\//i, 'Invalid URL format.']
     },
-    difficultyLvl: {
+    difficulty: {
         type: Number,
         required: [true, 'Difficulty level is required.'],
         min: 1,
