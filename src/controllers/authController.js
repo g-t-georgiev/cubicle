@@ -15,7 +15,7 @@ const renderRegisterPageHandler = (req, res) => res.render('auth/register');
 const loginHandler = function (req, res) {
     let { username, password } = req.body;
 
-    username = username.trim();
+    username = username.trim().toLowerCase();
     password = password.trim();
 
     return authService.login(username, password)
@@ -35,7 +35,7 @@ const loginHandler = function (req, res) {
 const registerHandler = function (req, res) {
     let {username, password, repeatPassword} = req.body;
 
-    username = username.trim();
+    username = username.trim().toLowerCase();
     password = password.trim();
     repeatPassword = repeatPassword.trim();
 
