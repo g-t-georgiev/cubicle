@@ -9,12 +9,17 @@ const userStatusMiddleware = async function (req, res, next) {
     const { user, params } = req;
     const { cubeId } = params;
 
-    const cube = await cubeService.get(cubeId);
+    const cube = cubeId ? await cubeService.get(cubeId) : null;
 
     const isLoggedin = Boolean(user);
+    const isOwner = cube && isLoggedin ? cube.creatorId === user._id : false;
 
-    req.hasPermissions = isLoggedin ? cube ? cube.creatorId === user._id : true : false;
-    res.locals.isOwner = cube && user ? cube.creatorId === user._id : false;
+    if (isLoggedin) {
+        req.cube = cube;
+    }
+
+    req.hasPermissions = isLoggedin ? cube ? isOwner : true : false;
+    res.locals.isOwner = isOwner;
     return next();
 };
 
@@ -35,8 +40,10 @@ const renderCreateCubePageHandler = (req, res) => {
 };
 
 const renderCubeDetailsPageHandler = async function (req, res) {
-    const { cubeId } = req.params;
-    const cube = await cubeService.get(cubeId);
+    // const { cubeId } = req.params;
+    // const cube = await cubeService.get(cubeId);
+
+    const { cube } = req;
     options = { ...cube };
     res.render('cubes/details', options);
 }
