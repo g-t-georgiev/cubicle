@@ -43,10 +43,13 @@
                 {{/if}}
             </ul>
         </header>
-
+        {{#if errors}}
+        {{#each errors}}
         <div id="notifications">
-            <p id="notification-message"></p>
+            <p id="notification-message">{{message}}</p>
         </div>
+        {{/each}}
+        {{/if}}
 
         {{{body}}}
     </div>
