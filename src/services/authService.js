@@ -2,25 +2,18 @@ const User = require('../models/User');
 
 const jwt = require('../utils/jwt');
 
-class AuthError extends Error {
-    constructor(message, status) {
-        super(message);
-        this.status = status;
-    }
-}
-
 const register = function(username, password, repeatPassword) {
-    if (password !== repeatPassword) {
-        return Promise.reject(new AuthError('Passwords do not match', 400));
-    }
-
     return User.findOne({username})
         .then(user => {
             if (!user) {
+                if (password !== repeatPassword) {
+                    return Promise.reject({ errors: [new Error('Passwords do not match')] });
+                }
+
                 return User.create({ username, password });
             }
 
-            return Promise.reject(new AuthError('User already exist', 409));
+            // return Promise.reject(new AuthError('User already exist', 409));
         }); 
 }
 

@@ -39,17 +39,18 @@ const registerHandler = function (req, res) {
     password = password.trim();
     repeatPassword = repeatPassword.trim();
 
-    if (!username || !password || !repeatPassword) {
-        res.status(400).send('No empty inputs allowed.');
-    }
+    // if (!username || !password || !repeatPassword) {
+    //     res.status(400).send('No empty inputs allowed.');
+    // }
 
     return authService.register(username, password, repeatPassword)
         .then(user => {
             console.log(user);
             res.redirect('/auth/login');
         })
-        .catch(err => {
-            res.status(err.status ?? 400).send(err.message);
+        .catch(error => {
+            console.log(error.errors);
+            res.status(401).render('auth/register', { errors: error.errors });
         });
 };
 
