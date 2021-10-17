@@ -43,7 +43,7 @@ const registerHandler = function (req, res) {
 
     return authService.register(username, password, repeatPassword)
         .then(user => {
-            console.log(user);
+            // console.log(user);
             res.redirect('/auth/login');
         })
         .catch(error => {
