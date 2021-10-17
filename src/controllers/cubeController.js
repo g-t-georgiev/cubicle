@@ -81,22 +81,25 @@ const renderEditCubePageHandler = async function (req, res) {
 
 const editCubeHandler = async function (req, res) {
     const { cubeId } = req.params;
-    const data = req.body;
+    let { name, description, imageUrl, difficulty, creatorId } = req.body;
 
-    data.name = data.name.trim().toLowerCase();
-    data.description = data.description.trim().toLowerCase();
-    data.imageUrl = data.imageUrl.trim();
+    name = name.trim();
+    description = description.trim();
+    imageUrl = imageUrl.trim();
+    difficulty = Number(difficulty.trim());
 
     try {
-        await cubeService.edit(cubeId, data);
+        await cubeService.edit(cubeId, { name: name.toLowerCase(), description, imageUrl, difficulty, creatorId });
         res.redirect(`/cubes/${cubeId}/details`);
     } catch (error) {
         const { errors } = error;
+
+        const difficulties = renderCubeDifficultyOptions(difficulty);
         
         const invalidFields = Object.keys(errors);
         // console.log(invalidFields);
 
-        res.status(500).render('cubes/edit', { errors, invalidFields, difficulties, ...data });
+        res.status(500).render('cubes/edit', { errors, invalidFields, name, description, imageUrl, difficulties, creatorId });
     }
 };
 

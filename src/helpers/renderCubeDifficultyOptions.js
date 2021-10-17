@@ -1,4 +1,6 @@
 module.exports = function (difficulty) {
+    // console.log(difficulty);
+
     const difficultiesMap = {
         1: '1 - Very Easy',
         2: '2 - Easy',
@@ -16,6 +18,8 @@ module.exports = function (difficulty) {
             if (isSelected) {
                 option.selected = isSelected;
             }
+
+            // console.log(`${i}: ${isSelected}`);
 
             options.push(option);
         }
