@@ -60,7 +60,9 @@ const createCubeHandler = async function (req, res) {
         await cubeService.create(name, description, imageUrl, difficulty, creatorId);
         res.redirect('/');
     } catch (error) {
-        res.status(500).send(error.message);
+        const { errors } = error;
+        // console.log(errors);
+        res.status(500).render('cubes/create', { errors });
     }
 };
 
@@ -84,7 +86,9 @@ const editCubeHandler = async function (req, res) {
         await cubeService.edit(cubeId, data);
         res.redirect(`/cubes/${cubeId}/details`);
     } catch (error) {
-        res.status(400).send(error.message);
+        const { errors } = error;
+        // console.log(errors);
+        res.status(404).render('cubes/edit', { errors });
     }
 };
 
@@ -103,7 +107,9 @@ const deleteCubeHandler = async function (req, res) {
         await cubeService.remove(cubeId);
         res.redirect('/');
     } catch (error) {
-        res.status(400).send(error.message);
+        const { errors } = error;
+        // console.log(errors);
+        res.status(404).render('cubes/delete', { errors });
     }
 };
 
