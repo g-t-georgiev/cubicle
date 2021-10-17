@@ -21,20 +21,20 @@ const login = function(username, password) {
     return User.findOne({ username })
         .then(user => {
             if (!user) {
-                return Promise.reject({ errors: [new Error('Invalid username or password', 403)] });
+                return Promise.reject({ errors: [new Error('Invalid username or password')] });
             }
 
             return user;
         })
         .then(user => Promise.all([user.validatePassword(password), user])
-        .then(([isValid, user]) => isValid ? user : Promise.reject({ errors: [new Error('Invalid username or password', 403)] })));
+        .then(([isValid, user]) => isValid ? user : Promise.reject({ errors: [new Error('Invalid username or password')] })));
 }
 
-const logout = function (user) {
+const logout = async function (user) {
     const isLoggedin = Boolean(user);
 
     if (!isLoggedin) {
-        throw { errors: [new Error('Invalid session token.', 403)] };
+        throw { errors: [new Error('Invalid session token')] };
     }
 
     return isLoggedin;
