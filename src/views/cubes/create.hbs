@@ -3,11 +3,11 @@
   <div class="form">
     <form method="POST">
       <label for="name">Name</label>
-      <input type="text" id="name" name="name" value={{#if name}}{{name}}{{/if}}>
+      <input type="text" id="name" name="name" value="{{#if name}}{{name}}{{/if}}">
       <label for="name">Description</label>
       <textarea id="name" name="description">{{#if description}}{{description}}{{/if}}</textarea>
       <label for="image">ImageUrl</label>
-      <input type="text" id="image" name="imageUrl" value={{#if imageUrl}}{{imageUrl}}{{/if}}>
+      <input type="text" id="image" name="imageUrl" value="{{#if imageUrl}}{{imageUrl}}{{/if}}">
       <label for="difficulty">Difficulty</label>
       <select id="difficulty" name="difficulty">
         {{#each difficulties}}
@@ -26,3 +26,11 @@
     </form>
   </div>
 </main>
+
+<script>
+	const invalidFields = "{{invalidFields}}".split(',');
+	invalidFields.forEach(field => {
+		const htmlInputElem = document.querySelector(`[name="${field}"]`);
+		htmlInputElem.setAttribute('style', 'border: 1px solid red;');
+	});
+</script>
