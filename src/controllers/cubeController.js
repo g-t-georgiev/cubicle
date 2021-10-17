@@ -72,8 +72,9 @@ const createCubeHandler = async function (req, res) {
 };
 
 const renderEditCubePageHandler = async function (req, res) {
-    const { cubeId } = req.params;
-    const cube = await cubeService.get(cubeId);
+    // const { cubeId } = req.params;
+    // const cube = await cubeService.get(cubeId);
+    const { cube } = req;
     const difficulties = renderCubeDifficultyOptions(cube.difficulty);
     options = { ...cube, difficulties };
     res.render('cubes/edit', options);
@@ -95,7 +96,7 @@ const editCubeHandler = async function (req, res) {
         const { errors } = error;
 
         const difficulties = renderCubeDifficultyOptions(difficulty);
-        
+
         const invalidFields = Object.keys(errors);
         // console.log(invalidFields);
 
@@ -104,8 +105,9 @@ const editCubeHandler = async function (req, res) {
 };
 
 const renderDeleteCubePageHandler = async function (req, res) {
-    const { cubeId } = req.params;
-    const cube = await cubeService.get(cubeId);
+    // const { cubeId } = req.params;
+    // const cube = await cubeService.get(cubeId);
+    const { cube } = req;
     const difficulties = renderCubeDifficultyOptions(cube.difficulty);
     options = { ...cube, difficulties };
     res.render('cubes/delete', options);
