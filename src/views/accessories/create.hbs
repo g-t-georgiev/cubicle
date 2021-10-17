@@ -8,7 +8,17 @@
             <textarea id="description" name="description">{{#if description}}{{description}}{{/if}}</textarea>
             <label for="image">ImageUrl</label>
             <input type="text" id="image" name="imageUrl" value="{{#if imageUrl}}{{imageUrl}}{{/if}}>
-            <input type="submit" value="Create">
+            <input type=" submit" value="Create">
         </form>
     </div>
 </main>
+
+<script>
+    const invalidFields = "{{invalidFields}}".split(',');
+    invalidFields.forEach(field => {
+        const htmlInputElem = document.querySelector(`[name="${field}"]`);
+        if (htmlInputElem) {
+            htmlInputElem.setAttribute('style', 'border: 1px solid red;');
+        }
+    });
+</script>
