@@ -14,9 +14,7 @@ const userStatusMiddleware = async function (req, res, next) {
     const isLoggedin = Boolean(user);
     const isOwner = cube && isLoggedin ? cube.creatorId === user._id : false;
 
-    if (isLoggedin) {
-        req.cube = cube;
-    }
+    req.cube = cube;
 
     req.hasPermissions = isLoggedin ? cube ? isOwner : true : false;
     res.locals.isOwner = isOwner;
