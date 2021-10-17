@@ -12,13 +12,7 @@ const edit = (id, data) => Cube.findByIdAndUpdate(id, { ...data }, { runValidato
 const remove = (id) => Cube.findByIdAndDelete(id);
 
 const search = async function (searchText, from, to) {
-    searchText = searchText.trim().toLowerCase();
-    from = Number(from.trim());
-    to = Number(to.trim());
-
-    if (isNaN(from) || isNaN(to)) {
-        throw { errors: [new Error('Invalid search parameters for from..to range')] };
-    }
+    searchText = searchText.toLowerCase();
 
     const fieldsEmpty = !(searchText || from || to);
     // console.log(fieldsEmpty);
