@@ -51,13 +51,13 @@ const renderCubeDetailsPageHandler = async function (req, res) {
 const createCubeHandler = async function (req, res) {
     let { name, description, imageUrl, difficulty, creatorId } = req.body;
 
-    name = name.trim().toLowerCase();
-    description = description.trim().toLowerCase();
+    name = name.trim();
+    description = description.trim();
     imageUrl = imageUrl.trim();
     difficulty = Number(difficulty.trim());
 
     try {
-        await cubeService.create(name, description, imageUrl, difficulty, creatorId);
+        await cubeService.create(name.toLowerCase(), description, imageUrl, difficulty, creatorId);
         res.redirect('/');
     } catch (error) {
         const { errors } = error;
@@ -66,8 +66,8 @@ const createCubeHandler = async function (req, res) {
         console.log(invalidFields);
 
         const difficulties = renderCubeDifficultyOptions(difficulty);
-        
-        res.status(500).render('cubes/create', { errors, name, description, imageUrl, difficulties, creatorId });
+
+        res.status(500).render('cubes/create', { errors, invalidFields, name, description, imageUrl, difficulties, creatorId });
     }
 };
 
