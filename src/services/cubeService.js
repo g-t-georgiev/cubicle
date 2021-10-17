@@ -7,7 +7,7 @@ const getAll = () => Cube.find({}).lean();
 
 const create = (name, description, imageUrl, difficulty, creatorId) => Cube.create({ name, description, imageUrl, difficulty, creatorId });
 
-const edit = (id, data) => Cube.findByIdAndUpdate(id, { ...data });
+const edit = (id, data) => Cube.findByIdAndUpdate(id, { ...data }, { runValidators: true });
 
 const remove = (id) => Cube.findByIdAndDelete(id);
 

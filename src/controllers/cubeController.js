@@ -63,7 +63,7 @@ const createCubeHandler = async function (req, res) {
         const { errors } = error;
 
         const invalidFields = Object.keys(errors);
-        console.log(invalidFields);
+        // console.log(invalidFields);
 
         const difficulties = renderCubeDifficultyOptions(difficulty);
 
@@ -92,8 +92,11 @@ const editCubeHandler = async function (req, res) {
         res.redirect(`/cubes/${cubeId}/details`);
     } catch (error) {
         const { errors } = error;
-        // console.log(errors);
-        res.status(404).render('cubes/edit', { errors });
+        
+        const invalidFields = Object.keys(errors);
+        // console.log(invalidFields);
+
+        res.status(500).render('cubes/edit', { errors, invalidFields, difficulties, ...data });
     }
 };
 
