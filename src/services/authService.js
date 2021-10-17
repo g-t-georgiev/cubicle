@@ -3,6 +3,10 @@ const User = require('../models/User');
 const jwt = require('../utils/jwt');
 
 const register = function(username, password, repeatPassword) {
+    if (!username || !password) {
+        return Promise.reject({ errors: [new Error('Username or password must not be empty.')]});
+    }
+    
     return User.findOne({username})
         .then(user => {
             if (!user) {
