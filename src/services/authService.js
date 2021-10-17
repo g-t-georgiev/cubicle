@@ -31,13 +31,7 @@ const login = function(username, password) {
 }
 
 const logout = async function (user) {
-    const isLoggedin = Boolean(user);
-
-    if (!isLoggedin) {
-        throw { errors: [new Error('Invalid session token')] };
-    }
-
-    return isLoggedin;
+    return Boolean(user);
 }
 
 const createToken = function (user) {
