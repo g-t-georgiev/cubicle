@@ -1,10 +1,10 @@
 <main>
   <h1>{{pageTitle}}</h1>
   <form action="/search" method="GET">
-    <input type="text" class="search" name="search" placeholder="Search..." value="{{#if search}}{{search}}{{else}} {{/if}}">
-    <input type="number" name="from" class="difficulty" placeholder="Difficulty from..." value="{{#if from}}{{from}}{{else}} {{/if}}">
+    <input type="text" class="search" name="search" placeholder="Search..." value="{{#if search}}{{search}}{{/if}}">
+    <input type="number" name="from" class="difficulty" placeholder="Difficulty from..." value="{{#if from}}{{from}}{{/if}}">
     <span>-</span>
-    <input type="number" name="to" class="difficulty" placeholder="Difficulty to..." value="{{#if to}}{{to}}{{else}} {{/if}}">
+    <input type="number" name="to" class="difficulty" placeholder="Difficulty to..." value="{{#if to}}{{to}}{{/if}}">
     <input type="submit" value="search">
   </form>
 
