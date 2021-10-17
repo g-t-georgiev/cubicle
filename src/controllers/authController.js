@@ -27,8 +27,10 @@ const loginHandler = function (req, res) {
 
             res.redirect('/');
         })
-        .catch(err => {
-            res.status(err.status ?? 400).send(err.message);
+        .catch(error => {
+            const { errors } = error;
+            // console.log(errors);
+            res.status(401).render('auth/login', { errors });
         });
 };
 
@@ -39,32 +41,28 @@ const registerHandler = function (req, res) {
     password = password.trim();
     repeatPassword = repeatPassword.trim();
 
-    // if (!username || !password || !repeatPassword) {
-    //     res.status(400).send('No empty inputs allowed.');
-    // }
-
     return authService.register(username, password, repeatPassword)
         .then(user => {
             console.log(user);
             res.redirect('/auth/login');
         })
         .catch(error => {
-            console.log(error.errors);
-            res.status(401).render('auth/register', { errors: error.errors });
+            const { errors } = error;
+            // console.log(errors);
+            res.status(401).render('auth/register', { errors });
         });
 };
 
 const logoutHandler = function (req, res) {
     const { user } = req;
 
-    try {
-        authService.logout(user);
-        res.clearCookie(TOKEN_NAME);
-    } catch (err) {
-        console.log(err);
-    } finally {
-        res.redirect('/auth/login');
-    }
+    return authService.logout(user)
+        .then(_ => {
+            res.clearCookie(TOKEN_NAME);
+        })
+        .finally(() => {
+            res.redirect('/auth/login');
+        });
 };
 
 router.get('/login', filterRequests, renderLoginPageHandler);
