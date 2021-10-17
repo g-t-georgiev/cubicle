@@ -23,7 +23,7 @@ const addAccessoryHandler = async (req, res) => {
         const { errors } = error;
 
         const invalidFields = Object.keys(errors);
-        console.log(invalidFields);
+        // console.log(invalidFields);
 
         res.status(500).render('accessories/create', { errors, invalidFields, name, description, imageUrl });
     }
