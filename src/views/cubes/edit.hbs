@@ -10,9 +10,9 @@
             <input type="text" id="image" name="imageUrl" value="{{imageUrl}}">
             <label for="difficulty">Difficulty</label>
             <select id="difficulty" name="difficulty" />
-                {{#each difficulties}}
-                <option value="{{value}}" {{#if selected }} selected="{{selected}}" {{/if}}>{{text}}</option>
-                {{/each}}
+            {{#each difficulties}}
+            <option value="{{value}}" {{#if selected }} selected="{{selected}}" {{/if}}>{{text}}</option>
+            {{/each}}
             </select>
             <input type="hidden" value="{{creatorId}}" name="creatorId">
             <input type="submit" value="Edit">
@@ -21,9 +21,11 @@
 </main>
 
 <script>
-	const invalidFields = "{{invalidFields}}".split(',');
-	invalidFields.forEach(field => {
-		const htmlInputElem = document.querySelector(`[name="${field}"]`);
-		htmlInputElem.setAttribute('style', 'border: 1px solid red;');
-	});
+    const invalidFields = "{{invalidFields}}".split(',');
+    invalidFields.forEach(field => {
+        const htmlInputElem = document.querySelector(`[name="${field}"]`);
+        if (htmlInputElem) {
+            htmlInputElem.setAttribute('style', 'border: 1px solid red;');
+        }
+    });
 </script>
