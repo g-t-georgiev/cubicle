@@ -13,7 +13,7 @@ const register = function(username, password, repeatPassword) {
                 return User.create({ username, password });
             }
 
-            // return Promise.reject(new AuthError('User already exist', 409));
+            return Promise.reject({ errors: [new Error('User already exist', 409)] });
         }); 
 }
 
