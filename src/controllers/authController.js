@@ -15,10 +15,10 @@ const renderRegisterPageHandler = (req, res) => res.render('auth/register');
 const loginHandler = function (req, res) {
     let { username, password } = req.body;
 
-    username = username.trim().toLowerCase();
+    username = username.trim();
     password = password.trim();
 
-    return authService.login(username, password)
+    return authService.login(username.toLowerCase(), password)
         .then(user => authService.createToken(user))
         .then(token => {
             res.cookie(TOKEN_NAME, token, {
@@ -30,18 +30,18 @@ const loginHandler = function (req, res) {
         .catch(error => {
             const { errors } = error;
             // console.log(errors);
-            res.status(401).render('auth/login', { errors });
+            res.status(401).render('auth/login', { errors, username, password });
         });
 };
 
 const registerHandler = function (req, res) {
     let {username, password, repeatPassword} = req.body;
 
-    username = username.trim().toLowerCase();
+    username = username.trim();
     password = password.trim();
     repeatPassword = repeatPassword.trim();
 
-    return authService.register(username, password, repeatPassword)
+    return authService.register(username.toLowerCase(), password, repeatPassword)
         .then(user => {
             // console.log(user);
             res.redirect('/auth/login');
@@ -49,7 +49,7 @@ const registerHandler = function (req, res) {
         .catch(error => {
             const { errors } = error;
             // console.log(errors);
-            res.status(401).render('auth/register', { errors });
+            res.status(401).render('auth/register', { errors, username, password, repeatPassword });
         });
 };
 
