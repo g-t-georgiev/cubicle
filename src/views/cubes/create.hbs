@@ -1,21 +1,18 @@
 <main>
   <h1>Create</h1>
   <div class="form">
-    <form action='/cubes/create' method="POST">
+    <form method="POST">
       <label for="name">Name</label>
-      <input type="text" id="name" name="name">
+      <input type="text" id="name" name="name" value={{#if name}}{{name}}{{/if}}>
       <label for="name">Description</label>
-      <textarea id="name" name="description"></textarea>
+      <textarea id="name" name="description">{{#if description}}{{description}}{{/if}}</textarea>
       <label for="image">ImageUrl</label>
-      <input type="text" id="image" name="imageUrl">
+      <input type="text" id="image" name="imageUrl" value={{#if imageUrl}}{{imageUrl}}{{/if}}>
       <label for="difficulty">Difficulty</label>
       <select id="difficulty" name="difficulty">
-        <option value="1">1 - Very Easy</option>
-        <option value="2">2 - Easy</option>
-        <option value="3">3 - Medium (Standard 3x3)</option>
-        <option value="4">4 - Intermediate</option>
-        <option value="5">5 - Expert</option>
-        <option value="6">6 - Hardcore</option>
+        {{#each difficulties}}
+        <option value="{{value}}" {{#if selected }} selected="{{selected}}" {{/if}}>{{text}}</option>
+        {{/each}}
       </select>
       <input type="hidden" value="{{creatorId}}" name="creatorId">
       <input type="submit" value="Create">
