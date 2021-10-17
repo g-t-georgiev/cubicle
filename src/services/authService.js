@@ -18,6 +18,10 @@ const register = function(username, password, repeatPassword) {
 }
 
 const login = function(username, password) {
+    if (!username || !password) {
+        return Promise.reject({ errors: [new Error('Username or password must not be empty.')]});
+    }
+
     return User.findOne({ username })
         .then(user => {
             if (!user) {
