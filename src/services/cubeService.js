@@ -17,7 +17,7 @@ const search = async function (searchText, from, to) {
     to = Number(to.trim());
 
     if (isNaN(from) || isNaN(to)) {
-        throw new Error('Invalid search parameters for from..to range');
+        throw { errors: [new Error('Invalid search parameters for from..to range')] };
     }
 
     const fieldsEmpty = !(searchText || from || to);
