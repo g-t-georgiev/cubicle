@@ -3,13 +3,13 @@
 	<div class="form">
 		<form method="POST">
 			<label for="username">Username</label>
-			<input type="text" id="username" name="username">
+			<input type="text" id="username" name="username" value="{{#if username}}{{username}}{{/if}}">
 
 			<label for="password">Password</label>
-			<input type="password" id="password" name="password">
+			<input type="password" id="password" name="password" value="{{#if password}}{{password}}{{/if}}">
 
 			<label for="repeatPassword">Re-Password</label>
-			<input type="password" id="repeatPassword" name="repeatPassword">
+			<input type="password" id="repeatPassword" name="repeatPassword" value="{{#if repeatPassword}}{{repeatPassword}}{{/if}}">
 			<input type="submit" value="Register">
 		</form>
 	</div>
