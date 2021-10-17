@@ -30,7 +30,7 @@ const loginHandler = function (req, res) {
         .catch(error => {
             const { errors } = error;
             // console.log(errors);
-            res.status(401).render('auth/login', { errors, username, password });
+            res.status(401).render('auth/login', { errors, username });
         });
 };
 
@@ -49,7 +49,7 @@ const registerHandler = function (req, res) {
         .catch(error => {
             const { errors } = error;
             // console.log(errors);
-            res.status(401).render('auth/register', { errors, username, password, repeatPassword });
+            res.status(401).render('auth/register', { errors, username });
         });
 };
 
