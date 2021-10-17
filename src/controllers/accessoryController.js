@@ -12,15 +12,20 @@ const renderAddAccessoryPageHandler = (req, res) => res.render('accessories/crea
 const addAccessoryHandler = async (req, res) => {
     let { name, description, imageUrl } = req.body;
 
-    name = name.trim().toLowerCase();
-    description = description.trim().toLowerCase();
+    name = name.trim();
+    description = description.trim();
     imageUrl = imageUrl.trim();
     
     try {
-        await accessoryService.create(name, description, imageUrl);
+        await accessoryService.create(name.toLowerCase(), description, imageUrl);
         res.redirect('/');
     } catch (error) {
-        res.status(500).send(error.message);
+        const { errors } = error;
+
+        const invalidFields = Object.keys(errors);
+        console.log(invalidFields);
+
+        res.status(500).render('accessories/create', { errors, invalidFields, name, description, imageUrl });
     }
 };
 
