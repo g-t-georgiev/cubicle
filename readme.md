@@ -1,5 +1,5 @@
 # Cubicle
-Cubicle is a student project for practising creation of server-side apps, using NodeJS, ExpressJS, MongoDB and Mongoose.
+Cubicle is a student project for the web backend module from the Softuni programm.
 
 ## Project dependencies
 - NodeJs
