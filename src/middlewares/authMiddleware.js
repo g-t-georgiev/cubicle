@@ -1,5 +1,5 @@
 const jwt = require('../utils/jwt');
-const { TOKEN_NAME } = require('../config/constants');
+const { TOKEN_NAME } = require('../config/constants').AUTH;
 
 async function validateSession(req, res, next) {
     const authToken = req.cookies[TOKEN_NAME];
@@ -16,6 +16,7 @@ async function validateSession(req, res, next) {
         next();
     } catch (error) {
         res.clearCookie(TOKEN_NAME);
+        res.locals.error = error.message;
         next(error);
     }
 }
