@@ -53,18 +53,22 @@ const createCubeHandler = async function (req, res) {
         await cubeService.create(name.toLowerCase(), description, imageUrl, difficulty, creatorId);
         res.redirect('/');
     } catch (error) {
-        const { errors } = error;
+        if (['ValidationError', 'CastError'].includes(error.constructor.name)) {
+            const { errors } = error;
+            const messages = Object.keys(errors)
+                .map(path => errors[path].properties.message);
+            res.locals.errors = messages;
+        } else {
+            res.locals.error = error.message;
+        }
 
-        const invalidFields = Object.keys(errors);
-        // console.log(invalidFields);
+        options = { name, description, imageUrl, difficulty, creatorId };
 
-        res.status(500).render('cubes/create', { errors, invalidFields, name, description, imageUrl, difficulty, creatorId });
+        res.status(error.statusCode ?? 500).render('cubes/create', options);
     }
 };
 
 const renderEditCubePageHandler = async function (req, res) {
-    // const { cubeId } = req.params;
-    // const cube = await cubeService.get(cubeId);
     const { cube } = req;
     options = { ...cube };
     res.render('cubes/edit', options);
@@ -83,12 +87,18 @@ const editCubeHandler = async function (req, res) {
         await cubeService.edit(cubeId, { name: name.toLowerCase(), description, imageUrl, difficulty, creatorId });
         res.redirect(`/cubes/${cubeId}/details`);
     } catch (error) {
-        const { errors } = error;
+        if (['ValidationError', 'CastError'].includes(error.constructor.name)) {
+            const { errors } = error;
+            const messages = Object.keys(errors)
+                .map(path => errors[path].properties.message);
+            res.locals.errors = messages;
+        } else {
+            res.locals.error = error.message;
+        }
 
-        const invalidFields = Object.keys(errors);
-        // console.log(invalidFields);
+        options = { name, description, imageUrl, difficulty, creatorId };
 
-        res.status(500).render('cubes/edit', { errors, invalidFields, name, description, imageUrl, difficulty, creatorId });
+        res.status(error.statusCode ?? 500).render('cubes/edit', options);
     }
 };
 
@@ -99,15 +109,27 @@ const renderDeleteCubePageHandler = async function (req, res) {
 };
 
 const deleteCubeHandler = async function (req, res) {
-    const { cubeId } = req.params;
+    const {
+        cube,
+        params: { cubeId }
+    } = req;
 
     try {
         await cubeService.remove(cubeId);
         res.redirect('/');
     } catch (error) {
-        const { errors } = error;
-        // console.log(errors);
-        res.status(404).render('cubes/delete', { errors });
+        if (['ValidationError', 'CastError'].includes(error.constructor.name)) {
+            const { errors } = error;
+            const messages = Object.keys(errors)
+                .map(path => errors[path].properties.message);
+            res.locals.errors = messages;
+        } else {
+            res.locals.error = error.message;
+        }
+
+        options = { ...cube };
+
+        res.status(error.statusCode ?? 500).render('cubes/delete', options);
     }
 };
 
