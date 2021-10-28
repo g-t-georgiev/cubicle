@@ -12,11 +12,11 @@ const home = async function (req, res) {
         const { errors } = error;
         options = { pageTitle: 'browser', errors, cubes: [] }
     } finally {
-        res.render('index', options);
+        res.render('home', options);
     }
 };
 
-const about = (req, res) => res.render('about');
+const about = (req, res) => res.render('home/about');
 
 const search = async function (req, res) {
     let { search, from, to } = req.query;
@@ -32,7 +32,7 @@ const search = async function (req, res) {
         const { errors } = error;
         options = { pageTitle: 'search', errors, cubes: [] };
     } finally {
-        res.render('index', options);
+        res.render('home', options);
     }
 };
 
