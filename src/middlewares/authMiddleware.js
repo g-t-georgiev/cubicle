@@ -9,7 +9,7 @@ async function validateSession(req, res, next) {
     }
 
     try {
-        const decodedToken = await jwt.verify(token);
+        const decodedToken = await jwt.verify(authToken);
 
         req.user = decodedToken;
         res.locals.user = decodedToken;
