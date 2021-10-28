@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const authService = require('../services/authService');
-const { TOKEN_NAME } = require('../config/constants');
+const { TOKEN_NAME } = require('../config/constants').AUTH;
 
 const routeGuard = function (req, res, next) {
     const { user } = req;
