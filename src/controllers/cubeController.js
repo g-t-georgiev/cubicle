@@ -36,9 +36,6 @@ const renderCreateCubePageHandler = (req, res) => {
 };
 
 const renderCubeDetailsPageHandler = async function (req, res) {
-    // const { cubeId } = req.params;
-    // const cube = await cubeService.get(cubeId);
-
     const { cube } = req;
     options = { ...cube };
     res.render('cubes/details', options);
