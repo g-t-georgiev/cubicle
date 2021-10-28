@@ -10,7 +10,8 @@
       <input type="text" id="image" name="imageUrl" value="{{#if imageUrl}}{{imageUrl}}{{/if}}">
       <label for="difficulty">Difficulty</label>
       <select id="difficulty" name="difficulty">
-        {{#options difficulty}}
+        {{#if difficulty}}
+        {{{options difficulty}}}
         {{else}}
         <option value="1">1 - Very Easy</option>
         <option value="2">2 - Easy</option>
@@ -18,9 +19,8 @@
         <option value="4">4 - Intermediate</option>
         <option value="5">5 - Expert</option>
         <option value="6">6 - Hardcore</option>
-        {{/options}}
+        {{/if}}
       </select>
-      <input type="hidden" value="{{creatorId}}" name="creatorId">
       <input type="submit" value="Create">
     </form>
   </div>
