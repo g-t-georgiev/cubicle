@@ -2,10 +2,10 @@ const app = require('express')();
 
 const env = process.env.NODE_ENV ?? 'development';
 
-const config = require('./config/config')[env];
-const connectDB = require('./config/database');
+const config = require('./config')[env];
+const connectDB = require('./config/database.config');
 
-require('./config/express')(app);
+require('./config/express.config')(app);
 
 connectDB(config.db)
     .then((response) => {
