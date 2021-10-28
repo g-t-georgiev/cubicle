@@ -1,31 +1,23 @@
 const jwt = require('../utils/jwt');
 const { TOKEN_NAME } = require('../config/constants');
 
-function validateSession(req, res, next) {
-    const token = req.cookies[TOKEN_NAME];
+async function validateSession(req, res, next) {
+    const authToken = req.cookies[TOKEN_NAME];
 
-    if (!token) {
-        // No jwt token found in reques
-        // So isAuthenticated is set to false
-        res.locals.isAuthenticated = false;
+    if (!authToken) {
         return next();
     }
 
-    // If jwt token found, validate it
-    return jwt.verify(token)
-        .then(decodedToken => {
-            // Attach user to the request
-            req.user = decodedToken;
-            res.locals.isAuthenticated = true;
-            next();
-        })
-        .catch(error => {
-            // Delete session cookie
-            // console.log(err);
-            res.locals.isAuthenticated = false;
-            res.clearCookie(TOKEN_NAME);
-            next(error);
-        });
+    try {
+        const decodedToken = await jwt.verify(token);
+
+        req.user = decodedToken;
+        res.locals.user = decodedToken;
+        next();
+    } catch (error) {
+        res.clearCookie(TOKEN_NAME);
+        next(error);
+    }
 }
 
 module.exports = function (app) {
