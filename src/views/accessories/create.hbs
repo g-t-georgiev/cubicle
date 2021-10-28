@@ -12,13 +12,3 @@
         </form>
     </div>
 </main>
-
-<script>
-    const invalidFields = "{{invalidFields}}".split(',');
-    invalidFields.forEach(field => {
-        const htmlInputElem = document.querySelector(`[name="${field}"]`);
-        if (htmlInputElem) {
-            htmlInputElem.setAttribute('style', 'border: 1px solid red;');
-        }
-    });
-</script>
