@@ -10,9 +10,7 @@
             <input type="text" id="image" name="imageUrl" value="{{imageUrl}}" disabled="true" />
             <label for="difficulty">Difficulty</label>
             <select id="difficulty" name="difficulty" disabled="true" />
-                {{#each difficulties}}
-                <option value="{{value}}" {{#if selected }} selected="{{selected}}" {{/if}}>{{text}}</option>
-                {{/each}}
+            {{{options difficulty}}}
             </select>
             <input type="hidden" value="{{creatorId}}" name="creatorId">
             <input type="submit" value="Delete">
