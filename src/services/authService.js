@@ -11,7 +11,7 @@ const register = async function(username, password, repeatPassword) {
         throw error;
     }
     
-    const user = User.findOne({username})
+    const user = await User.findOne({username})
 
     if (user) {
         error = new Error('User already exist', 409);
@@ -35,7 +35,7 @@ const login = async function(username, password) {
         throw error;
     }
 
-    const user = User.findOne({ username });
+    const user = await User.findOne({ username });
 
     if (!user) {
         error = new Error('Invalid username or password');
@@ -43,7 +43,9 @@ const login = async function(username, password) {
         throw error;
     }
 
-    if (!user.validatePassword(password)) {
+    const isValid = await user.validatePassword(password);
+
+    if (!isValid) {
         error = new Error('Invalid username or password');
         error.statusCode = 401;
         throw error;
