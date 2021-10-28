@@ -1,7 +1,10 @@
+const { SERVER_PORT, DB_PORT } = require('./constants').ENV;
+
 const env = {
     development: {
-        port: process.env.PORT ?? 3000,
-        db: 'mongodb://localhost:27017/cubicle'
+        port: SERVER_PORT ?? 3000,
+        db: `mongodb://localhost:${DB_PORT}/cubicle`,
+        url: `http://localhost:${SERVER_PORT}/`
     },
     production: {
         port: process.env.PORT,
