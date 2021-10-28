@@ -3,7 +3,7 @@ const router = require('express').Router();
 const cubeService = require('../services/cubeService');
 const cubeAccessoryController = require('./cubeAccessoryController');
 
-const userStatusMiddleware = async function (req, res, next) {
+const decorateRequest = async function (req, res, next) {
     const {
         user,
         params: { cubeId }
@@ -148,13 +148,15 @@ const deleteCubeHandler = async function (req, res) {
     }
 };
 
-router.get('/:cubeId/details', userStatusMiddleware, renderCubeDetailsPageHandler);
-router.get('/:cubeId/edit', userStatusMiddleware, routeGuard, renderEditCubePageHandler);
-router.post('/:cubeId/edit', userStatusMiddleware, routeGuard, editCubeHandler);
-router.get('/:cubeId/delete', userStatusMiddleware, routeGuard, renderDeleteCubePageHandler);
-router.post('/:cubeId/delete', userStatusMiddleware, routeGuard, deleteCubeHandler);
-router.use('/:cubeId/accessories', userStatusMiddleware, routeGuard, cubeAccessoryController);
-router.get('/create', userStatusMiddleware, routeGuard, renderCreateCubePageHandler);
-router.post('/create', userStatusMiddleware, routeGuard, createCubeHandler);
+router.use(decorateRequest);
+
+router.get('/:cubeId/details', renderCubeDetailsPageHandler);
+router.get('/:cubeId/edit', routeGuard, renderEditCubePageHandler);
+router.post('/:cubeId/edit', routeGuard, editCubeHandler);
+router.get('/:cubeId/delete', routeGuard, renderDeleteCubePageHandler);
+router.post('/:cubeId/delete', routeGuard, deleteCubeHandler);
+router.use('/:cubeId/accessories', routeGuard, cubeAccessoryController);
+router.get('/create', routeGuard, renderCreateCubePageHandler);
+router.post('/create', routeGuard, createCubeHandler);
 
 module.exports = router;
