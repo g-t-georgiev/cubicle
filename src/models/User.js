@@ -28,10 +28,14 @@ const userSchema = new mongoose.Schema({
 	}
 });
 
-userSchema.pre('save', bcrypt.hashPassword);
+userSchema.pre('save', async function (next) {
+	const hash = await require('bcrypt').hash(this.password, require('../config/constants').SALT);
+	this.password = hash;
+	next();
+});
 
 userSchema.methods.validatePassword = function (password) {
-	return bcrypt.comparePassword.call(this, password);
+	return require('bcrypt').compare(password, this.password);
 }
 
 const User = mongoose.model('User', userSchema);
