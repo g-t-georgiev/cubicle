@@ -12,57 +12,65 @@ const filterRequests = function (req, res, next) {
 const renderLoginPageHandler = (req, res) => res.render('auth/login');
 const renderRegisterPageHandler = (req, res) => res.render('auth/register');
 
-const loginHandler = function (req, res) {
+const loginHandler = async function (req, res) {
     let { username, password } = req.body;
 
     username = username.trim();
     password = password.trim();
 
-    return authService.login(username.toLowerCase(), password)
-        .then(user => authService.createToken(user))
-        .then(token => {
-            res.cookie(TOKEN_NAME, token, {
-                httpOnly: true,
-            });
-
-            res.redirect('/');
-        })
-        .catch(error => {
+    try {
+        const user = await authService.login(username.toLowerCase(), password);
+        const authToken = await authService.createToken(user);
+        res.cookie(TOKEN_NAME, authToken, { httpOnly: true });
+        res.redirect('/');
+    } catch (error) {
+        if (['ValidationError', 'CastError'].includes(error.constructor.name)) {
             const { errors } = error;
-            // console.log(errors);
-            res.status(401).render('auth/login', { errors, username });
-        });
+            const messages = Object.keys(errors)
+                .map(path => errors[path].properties.message);
+            res.locals.errors = messages;
+        } else {
+            res.locals.error = error.message;
+        }
+
+        res.status(error.statusCode ?? 500).render('auth/login', { username, password });
+    }
 };
 
-const registerHandler = function (req, res) {
-    let {username, password, repeatPassword} = req.body;
+const registerHandler = async function (req, res) {
+    let { username, password, repeatPassword } = req.body;
 
     username = username.trim();
     password = password.trim();
     repeatPassword = repeatPassword.trim();
 
-    return authService.register(username.toLowerCase(), password, repeatPassword)
-        .then(user => {
-            // console.log(user);
-            res.redirect('/auth/login');
-        })
-        .catch(error => {
+    try {
+        await authService.register(username.toLowerCase(), password, repeatPassword);
+        res.redirect('/auth/login');
+    } catch (error) {
+        if (['ValidationError', 'CastError'].includes(error.constructor.name)) {
             const { errors } = error;
-            // console.log(errors);
-            res.status(401).render('auth/register', { errors, username });
-        });
+            const messages = Object.keys(errors)
+                .map(path => errors[path].properties.message);
+            res.locals.errors = messages;
+        } else {
+            res.locals.error = error.message;
+        }
+
+        res.status(error.statusCode ?? 500).render('auth/register');
+    }
 };
 
 const logoutHandler = function (req, res) {
-    const { user } = req;
 
-    return authService.logout(user)
-        .then(_ => {
-            res.clearCookie(TOKEN_NAME);
-        })
-        .finally(() => {
-            res.redirect('/auth/login');
-        });
+    if (req.user) {
+        res.clearCookie(TOKEN_NAME);
+    } else {
+        res.locals.error = 'Invalid session token.';
+        res.status(403).render('404');
+    }
+
+    res.redirect('/auth/login');
 };
 
 router.get('/login', filterRequests, renderLoginPageHandler);
