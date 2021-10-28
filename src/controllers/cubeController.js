@@ -19,7 +19,7 @@ const userStatusMiddleware = async function (req, res, next) {
     return next();
 };
 
-const filterRequests = function (req, res, next) {
+const routeGuard = function (req, res, next) {
     const { hasPermissions } = req;
     return hasPermissions ? next() : res.redirect('/');
 };
@@ -112,12 +112,12 @@ const deleteCubeHandler = async function (req, res) {
 };
 
 router.get('/:cubeId/details', userStatusMiddleware, renderCubeDetailsPageHandler);
-router.get('/:cubeId/edit', userStatusMiddleware, filterRequests, renderEditCubePageHandler);
-router.post('/:cubeId/edit', userStatusMiddleware, filterRequests, editCubeHandler);
-router.get('/:cubeId/delete', userStatusMiddleware, filterRequests, renderDeleteCubePageHandler);
-router.post('/:cubeId/delete', userStatusMiddleware, filterRequests, deleteCubeHandler);
-router.use('/:cubeId/accessories', userStatusMiddleware, filterRequests, cubeAccessoryController);
-router.get('/create', userStatusMiddleware, filterRequests, renderCreateCubePageHandler);
-router.post('/create', userStatusMiddleware, filterRequests, createCubeHandler);
+router.get('/:cubeId/edit', userStatusMiddleware, routeGuard, renderEditCubePageHandler);
+router.post('/:cubeId/edit', userStatusMiddleware, routeGuard, editCubeHandler);
+router.get('/:cubeId/delete', userStatusMiddleware, routeGuard, renderDeleteCubePageHandler);
+router.post('/:cubeId/delete', userStatusMiddleware, routeGuard, deleteCubeHandler);
+router.use('/:cubeId/accessories', userStatusMiddleware, routeGuard, cubeAccessoryController);
+router.get('/create', userStatusMiddleware, routeGuard, renderCreateCubePageHandler);
+router.post('/create', userStatusMiddleware, routeGuard, createCubeHandler);
 
 module.exports = router;
