@@ -27,7 +27,8 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre('save', async function (next) {
-	const hash = await require('bcrypt').hash(this.password, require('../config/constants').SALT);
+	const { SALT } = require('../config/constants').AUTH;
+	const hash = await require('bcrypt').hash(this.password, SALT);
 	this.password = hash;
 	next();
 });

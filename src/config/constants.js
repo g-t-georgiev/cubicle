@@ -14,8 +14,7 @@ module.exports = {
     },
     AUTH: {
         SECRET,
-    },
-    SECRET,
-    TOKEN_NAME,
-    SALT
+        SALT,
+        TOKEN_NAME
+    }
 };
