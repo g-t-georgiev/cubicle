@@ -3,8 +3,6 @@ const router = require('express').Router();
 const cubeService = require('../services/cubeService');
 const cubeAccessoryController = require('./cubeAccessoryController');
 
-const renderCubeDifficultyOptions = require('../helpers/renderCubeDifficultyOptions');
-
 const userStatusMiddleware = async function (req, res, next) {
     const { user, params } = req;
     const { cubeId } = params;
@@ -63,9 +61,7 @@ const createCubeHandler = async function (req, res) {
         const invalidFields = Object.keys(errors);
         // console.log(invalidFields);
 
-        const difficulties = renderCubeDifficultyOptions(difficulty);
-
-        res.status(500).render('cubes/create', { errors, invalidFields, name, description, imageUrl, difficulties, creatorId });
+        res.status(500).render('cubes/create', { errors, invalidFields, name, description, imageUrl, difficulty, creatorId });
     }
 };
 
@@ -73,8 +69,7 @@ const renderEditCubePageHandler = async function (req, res) {
     // const { cubeId } = req.params;
     // const cube = await cubeService.get(cubeId);
     const { cube } = req;
-    const difficulties = renderCubeDifficultyOptions(cube.difficulty);
-    options = { ...cube, difficulties };
+    options = { ...cube };
     res.render('cubes/edit', options);
 };
 
@@ -93,21 +88,16 @@ const editCubeHandler = async function (req, res) {
     } catch (error) {
         const { errors } = error;
 
-        const difficulties = renderCubeDifficultyOptions(difficulty);
-
         const invalidFields = Object.keys(errors);
         // console.log(invalidFields);
 
-        res.status(500).render('cubes/edit', { errors, invalidFields, name, description, imageUrl, difficulties, creatorId });
+        res.status(500).render('cubes/edit', { errors, invalidFields, name, description, imageUrl, difficulty, creatorId });
     }
 };
 
 const renderDeleteCubePageHandler = async function (req, res) {
-    // const { cubeId } = req.params;
-    // const cube = await cubeService.get(cubeId);
     const { cube } = req;
-    const difficulties = renderCubeDifficultyOptions(cube.difficulty);
-    options = { ...cube, difficulties };
+    options = { ...cube };
     res.render('cubes/delete', options);
 };
 
