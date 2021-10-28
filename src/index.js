@@ -8,8 +8,7 @@ const connectDB = require('./config/database.config');
 require('./config/express.config')(app);
 
 connectDB(config.db)
-    .then((response) => {
-        // console.log(response);
+    .then((_) => {
         app.listen(config.port, console.log.bind(console, `Application is listening on port ${config.port}! Click here to open http://localhost:${config.port}/`));
     })
     .catch(err => {
