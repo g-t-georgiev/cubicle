@@ -18,7 +18,7 @@ const decorateRequest = async function (req, res, next) {
 
     req.hasPermissions = isLoggedin ? cube ? isOwner : true : false;
     res.locals.isOwner = isOwner;
-    return next();
+    next();
 };
 
 const routeGuard = function (req, res, next) {
@@ -28,15 +28,15 @@ const routeGuard = function (req, res, next) {
 
 let options = null;
 
-const renderCreateCubePageHandler = (req, res) => res.render('cubes/create');
+const renderCreateCubePage = (req, res) => res.render('cubes/create');
 
-const renderCubeDetailsPageHandler = async function (req, res) {
+const renderCubeDetailsPage = async function (req, res) {
     const { cube } = req;
     options = { ...cube };
     res.render('cubes/details', options);
 }
 
-const createCubeHandler = async function (req, res) {
+const createCube = async function (req, res) {
     let {
         user,
         body: {
@@ -73,13 +73,13 @@ const createCubeHandler = async function (req, res) {
     }
 };
 
-const renderEditCubePageHandler = async function (req, res) {
+const renderEditCubePage = async function (req, res) {
     const { cube } = req;
     options = { ...cube };
     res.render('cubes/edit', options);
 };
 
-const editCubeHandler = async function (req, res) {
+const editCube = async function (req, res) {
     let {
         user,
         params: { cubeId },
@@ -117,13 +117,13 @@ const editCubeHandler = async function (req, res) {
     }
 };
 
-const renderDeleteCubePageHandler = async function (req, res) {
+const renderDeleteCubePage = async function (req, res) {
     const { cube } = req;
     options = { ...cube };
     res.render('cubes/delete', options);
 };
 
-const deleteCubeHandler = async function (req, res) {
+const deleteCube = async function (req, res) {
     const {
         cube,
         params: { cubeId }
@@ -148,15 +148,13 @@ const deleteCubeHandler = async function (req, res) {
     }
 };
 
-router.use(decorateRequest);
-
-router.get('/:cubeId/details', renderCubeDetailsPageHandler);
-router.get('/:cubeId/edit', routeGuard, renderEditCubePageHandler);
-router.post('/:cubeId/edit', routeGuard, editCubeHandler);
-router.get('/:cubeId/delete', routeGuard, renderDeleteCubePageHandler);
-router.post('/:cubeId/delete', routeGuard, deleteCubeHandler);
-router.use('/:cubeId/accessories', routeGuard, cubeAccessoryController);
-router.get('/create', routeGuard, renderCreateCubePageHandler);
-router.post('/create', routeGuard, createCubeHandler);
+router.get('/:cubeId/details', decorateRequest, renderCubeDetailsPage);
+router.get('/:cubeId/edit', decorateRequest, routeGuard, renderEditCubePage);
+router.post('/:cubeId/edit', decorateRequest, routeGuard, editCube);
+router.get('/:cubeId/delete', decorateRequest, routeGuard, renderDeleteCubePage);
+router.post('/:cubeId/delete', decorateRequest, routeGuard, deleteCube);
+router.use('/:cubeId/accessories', decorateRequest, routeGuard, cubeAccessoryController);
+router.get('/create', decorateRequest, routeGuard, renderCreateCubePage);
+router.post('/create', decorateRequest, routeGuard, createCube);
 
 module.exports = router;
