@@ -4,13 +4,15 @@ const cubeService = require('../services/cubeService');
 const cubeAccessoryController = require('./cubeAccessoryController');
 
 const userStatusMiddleware = async function (req, res, next) {
-    const { user, params } = req;
-    const { cubeId } = params;
+    const {
+        user,
+        params: { cubeId }
+    } = req;
 
     const cube = cubeId ? await cubeService.get(cubeId) : null;
 
     const isLoggedin = Boolean(user);
-    const isOwner = cube && isLoggedin ? cube.creatorId === user._id : false;
+    const isOwner = cube && isLoggedin ? cube.creatorId === user.id : false;
 
     req.cube = cube;
 
@@ -26,14 +28,7 @@ const routeGuard = function (req, res, next) {
 
 let options = null;
 
-const renderCreateCubePageHandler = (req, res) => {
-    const { user } = req;
-
-    const creatorId = user._id;
-    options = { creatorId };
-
-    res.render('cubes/create', options);
-};
+const renderCreateCubePageHandler = (req, res) => res.render('cubes/create');
 
 const renderCubeDetailsPageHandler = async function (req, res) {
     const { cube } = req;
@@ -42,7 +37,17 @@ const renderCubeDetailsPageHandler = async function (req, res) {
 }
 
 const createCubeHandler = async function (req, res) {
-    let { name, description, imageUrl, difficulty, creatorId } = req.body;
+    let {
+        user,
+        body: {
+            name,
+            description,
+            imageUrl,
+            difficulty
+        }
+    } = req;
+
+    let creatorId = user.id;
 
     name = name.trim();
     description = description.trim();
@@ -75,8 +80,18 @@ const renderEditCubePageHandler = async function (req, res) {
 };
 
 const editCubeHandler = async function (req, res) {
-    const { cubeId } = req.params;
-    let { name, description, imageUrl, difficulty, creatorId } = req.body;
+    let {
+        user,
+        params: { cubeId },
+        body: {
+            name,
+            description,
+            imageUrl,
+            difficulty
+        }
+    } = req;
+
+    let creatorId = user.id;
 
     name = name.trim();
     description = description.trim();
