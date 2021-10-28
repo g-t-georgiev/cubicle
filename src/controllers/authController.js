@@ -3,10 +3,14 @@ const router = require('express').Router();
 const authService = require('../services/authService');
 const { TOKEN_NAME } = require('../config/constants');
 
-const filterRequests = function (req, res, next) {
+const routeGuard = function (req, res, next) {
     const { user } = req;
 
-    return !user ? next() : res.redirect('/');
+    if (req.path.includes('login') || req.path.includes('register')) {
+        return user ? res.redirect('/') : next();
+    } else if (req.path.includes('logout')) {
+        return !user ? res.redirect('/') : next();
+    }
 }
 
 const renderLoginPageHandler = (req, res) => res.render('auth/login');
@@ -62,21 +66,14 @@ const registerHandler = async function (req, res) {
 };
 
 const logoutHandler = function (req, res) {
-
-    if (req.user) {
-        res.clearCookie(TOKEN_NAME);
-    } else {
-        res.locals.error = 'Invalid session token.';
-        res.status(403).render('404');
-    }
-
+    res.clearCookie(TOKEN_NAME);
     res.redirect('/auth/login');
 };
 
-router.get('/login', filterRequests, renderLoginPageHandler);
-router.post('/login', filterRequests, loginHandler);
-router.get('/register', filterRequests, renderRegisterPageHandler);
-router.post('/register', filterRequests, registerHandler);
-router.get('/logout', logoutHandler);
+router.get('/login', routeGuard, renderLoginPageHandler);
+router.post('/login', routeGuard, loginHandler);
+router.get('/register', routeGuard, renderRegisterPageHandler);
+router.post('/register', routeGuard, registerHandler);
+router.get('/logout', routeGuard, logoutHandler);
 
 module.exports = router;
