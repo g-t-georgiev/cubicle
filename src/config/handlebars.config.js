@@ -2,10 +2,12 @@ const exphbs = require('express-handlebars');
 const handlebars = exphbs.create({
     extname: 'hbs',
     helpers: {
-        *options(difficulty) {
+        options(difficulty) {
             if (!difficulty) {
                 return null;
             }
+
+            const options = [];
 
             const text = {
                 1: '1 - Very Easy',
@@ -17,8 +19,10 @@ const handlebars = exphbs.create({
             };
 
             for (let index = 1; index <= 6; index++) {
-                yield `<option value="${index}" ${difficulty === index ? 'selected' : ''}>${text[index]}</option>`;
+                options.push(`<option value="${index}" ${difficulty === index ? 'selected' : ''}>${text[index]}</option>`);
             }
+
+            return options.join('\n');
         }
     }
 });
