@@ -3,7 +3,9 @@ const handlebars = exphbs.create({
     extname: 'hbs',
     helpers: {
         *options(difficulty) {
-            // console.log(difficulty);
+            if (!difficulty) {
+                return null;
+            }
 
             const text = {
                 1: '1 - Very Easy',
