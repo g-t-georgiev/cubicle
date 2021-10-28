@@ -2,49 +2,59 @@ const User = require('../models/User');
 
 const jwt = require('../utils/jwt');
 
-const register = function(username, password, repeatPassword) {
+let error;
+
+const register = async function(username, password, repeatPassword) {
     if (!username || !password) {
-        return Promise.reject({ errors: [new Error('Username or password must not be empty.')]});
+        error = new Error('Username or password must not be empty.');
+        error.statusCode = 403;
+        throw error;
     }
     
-    return User.findOne({username})
-        .then(user => {
-            if (!user) {
-                if (password !== repeatPassword) {
-                    return Promise.reject({ errors: [new Error('Passwords do not match')] });
-                }
+    const user = User.findOne({username})
 
-                return User.create({ username, password });
-            }
-
-            return Promise.reject({ errors: [new Error('User already exist', 409)] });
-        }); 
-}
-
-const login = function(username, password) {
-    if (!username || !password) {
-        return Promise.reject({ errors: [new Error('Username or password must not be empty.')]});
+    if (user) {
+        error = new Error('User already exist', 409);
+        error.statusCode = 409;
+        throw error;
     }
 
-    return User.findOne({ username })
-        .then(user => {
-            if (!user) {
-                return Promise.reject({ errors: [new Error('Invalid username or password')] });
-            }
+    if (password !== repeatPassword) {
+        error = new Error('Passwords do not match');
+        error.statusCode = 403;
+        throw error;
+    }
 
-            return user;
-        })
-        .then(user => Promise.all([user.validatePassword(password), user])
-        .then(([isValid, user]) => isValid ? user : Promise.reject({ errors: [new Error('Invalid username or password')] })));
+    return User.create({ username, password });
 }
 
-const logout = async function (user) {
-    return Boolean(user);
+const login = async function(username, password) {
+    if (!username || !password) {
+        error = new Error('Username or password must not be empty.');
+        error.statusCode = 403;
+        throw error;
+    }
+
+    const user = User.findOne({ username });
+
+    if (!user) {
+        error = new Error('Invalid username or password');
+        error.statusCode = 401;
+        throw error;
+    }
+
+    if (!user.validatePassword(password)) {
+        error = new Error('Invalid username or password');
+        error.statusCode = 401;
+        throw error;
+    }
+
+    return user;
 }
 
 const createToken = function (user) {
     const payload = {
-        _id: user._id,
+        id: user._id,
         username: user.username
     }
 
@@ -54,6 +64,5 @@ const createToken = function (user) {
 module.exports = {
     register,
     login,
-    logout,
     createToken
 }
