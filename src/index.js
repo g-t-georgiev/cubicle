@@ -3,15 +3,9 @@ const app = require('express')();
 const env = process.env.NODE_ENV ?? 'development';
 
 const config = require('./config/config')[env];
-const routes = require('./config/routes');
 const connectDB = require('./config/database');
 
-// console.log(`PORT: ${config.port}`);
-// console.log(`DB: ${config.db}`);
-
 require('./config/express')(app);
-
-app.use(routes);
 
 connectDB(config.db)
     .then((response) => {
