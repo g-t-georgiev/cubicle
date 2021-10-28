@@ -5,7 +5,7 @@ const accessoryService = require('../services/accessoryService');
 
 let options = null;
 
-const renderAddCubeAccessoryPageHandler = async function(req, res) {
+const renderAddCubeAccessoryPage = async function(req, res) {
     const { cubeId } = req.params;
 
     const cube = await cubeService.get(cubeId);
@@ -14,12 +14,13 @@ const renderAddCubeAccessoryPageHandler = async function(req, res) {
 
     const unattachedAccessories = await accessoryService.getAllWithout(cubeAccessoriesIds);
 
-    options = {  cube, unattachedAccessories }
+    cube.name = cube.name.toUpperCase();
+    options = { cube, unattachedAccessories };
 
     res.render('cubes/accessories/add', options);
 }
 
-const addCubeAccessoryHandler = async function(req, res) {
+const addCubeAccessory = async function(req, res) {
     const { cubeId } = req.params;
     const { accessory: accessoryId } = req.body;
 
@@ -27,7 +28,7 @@ const addCubeAccessoryHandler = async function(req, res) {
     res.redirect(`/cubes/${cubeId}/details`);
 }
 
-router.get('/add', renderAddCubeAccessoryPageHandler);
-router.post('/add', addCubeAccessoryHandler);
+router.get('/add', renderAddCubeAccessoryPage);
+router.post('/add', addCubeAccessory);
 
 module.exports = router;
